@@ -1,0 +1,11 @@
+name: New MCP server
+version: 0.0.1
+schema: v1
+mcpServers:
+  - name: gitlab
+    command: npx
+    args:
+      - '@modelcontextprotocol/server-gitlab'
+    env:
+      GITLAB_PERSONAL_ACCESS_TOKEN: J-xxx
+      GITLAB_API_URL: https://git.xxx.org/api/v4

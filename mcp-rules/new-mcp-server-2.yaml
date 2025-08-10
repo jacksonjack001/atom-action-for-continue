@@ -1,0 +1,7 @@
+name: New MCP server
+version: 0.0.1
+schema: v1
+mcpServers:
+  - name: memoryos
+    type: sse
+    url: http://113.44.119.228:5010/sse

@@ -1,0 +1,7 @@
+name: jira
+version: 0.0.1
+schema: v1
+mcpServers:
+  - name: jira
+    type: sse
+    url: http://113.44.119.228:5098/sse
