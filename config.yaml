@@ -1,0 +1,193 @@
+name: lzchat
+version: 1.0.0
+schema: v1
+
+models:
+  - name: bge
+    provider: openai
+    model: xx-bge-m3
+    apiBase: http://XXX:5020/v1
+    apiKey: sk-Ooo
+    roles:
+      - embed
+  - name: ada
+    provider: openai
+    model: text-embedding-ada-002
+    apiBase: https://xxx
+    apiKey: sk-Ooo
+    roles:
+      - embed
+  - name: autocomplete
+    provider: openai
+    model: xx-qwen3-coder-30B
+    apiBase: https://xxx
+    apiKey: sk-Ooo
+    promptTemplates:
+      autocomplete: |
+        `
+        globalThis.importantFunc = importantFunc
+        <|fim_prefix|>{{{prefix}}}<|fim_suffix|>{{{suffix}}}<|fim_middle|>
+        `
+    roles:
+      - autocomplete
+  - name: autocomplete-ip
+    provider: openai
+    model: qwen2.5-coder-1.5b
+    apiBase: http://XXX:5022/v1
+    apiKey: sk-Ooo
+    roles:
+      - autocomplete
+  - name: gpt4o
+    provider: openai
+    model: gpt-4o
+    apiBase: https://xxx
+    apiKey: sk-Ooo
+    roles:
+      - chat
+      - edit
+    capabilities:
+      - tool_use
+  - name: sonnet
+    provider: openai
+    model: claude-sonnet-4-20250514
+    apiBase: https://xxx
+    apiKey: sk-Ooo
+    roles:
+      - chat
+      - edit
+      - apply
+    promptTemplates:
+      apply: |
+        Original: {{{original_code}}}
+        New: {{{new_code}}}
+
+        Please generate the final code without any markers or explanations.
+    capabilities:
+      - tool_use
+  - name: qwen-ds-v3
+    provider: openai
+    model: deepseek-v3
+    apiBase: https://dashscope.aliyuncs.com/compatible-mode/v1
+    apiKey: ooo
+    roles:
+      - chat
+      - edit
+    capabilities:
+      - tool_use
+  - name: deepseek
+    provider: openai
+    model: deepseek-chat
+    apiBase: https://xxx
+    apiKey: sk-Ooo
+    roles:
+      - chat
+      - edit
+    promptTemplates:
+      apply: |
+        Original: {{{original_code}}}
+        New: {{{new_code}}}
+
+        Please generate the final code without any markers or explanations.
+    capabilities:
+      - tool_use
+  - name: xx-qwen3-coder
+    provider: openai
+    model: xx-qwen3-coder-30B
+    apiBase: https://xxx
+    apiKey: sk-Ooo
+    roles:
+      - chat
+      - edit
+      - autocomplete
+      - apply
+    promptTemplates:
+      edit: |
+        `Here is the code before editing:
+        \`\`\`{{{language}}}
+        {{{codeToEdit}}}
+        \`\`\`
+
+        Here is the edit requested:
+        "{{{userInput}}}"
+
+        Please generate the final code without any markers or explanations.
+        Here is the code after editing:`
+      apply: |
+        Original: {{{original_code}}}
+        New: {{{new_code}}}
+
+        Please generate the final code without any markers or explanations.
+
+    capabilities:
+      - tool_use
+  - name: xx-qwen3-coder-edit1
+    provider: openai
+    model: xx-qwen3-coder-30B
+    apiBase: https://xxx
+    apiKey: sk-Ooo
+    roles:
+      - edit
+    promptTemplates:
+      edit: |
+        `Here is the code before editing:
+        \`\`\`{{{language}}}
+        {{{codeToEdit}}}
+        \`\`\`
+
+        Here is the edit requested:
+        "{{{userInput}}}"
+
+        Please generate the final code without any markers or explanations.
+        Here is the code after editing:`
+  - name: xx-qwen3
+    provider: openai
+    model: xx-qwen3-32B
+    apiBase: https://xxx
+    apiKey: sk-Ooo
+    roles:
+      - chat
+      - edit
+      - apply
+    promptTemplates:
+      edit: |
+        `Here is the code before editing:
+        \`\`\`{{{language}}}
+        {{{codeToEdit}}}
+        \`\`\`
+
+        Here is the edit requested:
+        "{{{userInput}}}"
+
+        Here is the code after editing:`
+      apply: |
+        Original: {{{original_code}}}
+        New: {{{new_code}}}
+
+        Please generate the final code without any markers or explanations.
+      autocomplete: |
+        `
+        globalThis.importantFunc = importantFunc
+        {{{prefix}}}
+        `
+    capabilities:
+      - tool_use
+
+context:
+  - provider: code
+  - provider: docs
+  - provider: diff
+  - provider: terminal
+  - provider: problems
+  - provider: folder
+  - provider: codebase
+    params:  
+      nRetrieve: 50    # 初始从向量数据库检索的结果数量  
+      nFinal: 10       # 重排序后最终使用的结果数量  
+      useReranking: false
+      bm25Threshold: -10
+  - provider: http
+    params:
+      url: http://127.0.0.1:8001/retrieve
+      name: http
+      description: xx-gitlab-repository
+      displayTitle: xx-code-base
